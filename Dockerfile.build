@@ -1,0 +1,9 @@
+FROM nginx:alpine
+MAINTAINER Chs97 chs97@w2fzu.com
+COPY /opt/workdir/dist /usr/share/nginx/html/
+
+COPY /favicon.ico /usr/share/nginx/html/favicon.ico
+
+COPY /nginx.conf /etc/nginx/nginx.conf
+
+CMD ["nginx", "-g", "daemon off;"]
