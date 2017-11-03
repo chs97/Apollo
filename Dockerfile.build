@@ -1,6 +1,6 @@
 FROM nginx:alpine
 MAINTAINER Chs97 chs97@w2fzu.com
-COPY /opt/workdir/dist /usr/share/nginx/html/
+COPY /opt/workdir/build /usr/share/nginx/html/
 
 COPY /favicon.ico /usr/share/nginx/html/favicon.ico
 
