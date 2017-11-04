@@ -1,0 +1,51 @@
+.list {
+  .list-item {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: #fff;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    .avatar {
+      width: 40px;
+      height: 60px;
+      background-color: #eee;
+      img {
+        height: 80px;
+      }
+    }
+    .list-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-left: 10px;
+      .name {
+        font-size: 16px;
+        color: #2d2f33;
+      }
+      .phone {
+        font-size: 13px;
+        color: #5a5e66;
+      }
+      .address {
+        font-size: 13px;
+        color: #5a5e66;
+      }
+    }
+  }
+  .add {
+    border: 1px solid #d8dce5;
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    right: 10px;
+    bottom: 60px;
+    background-color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    z-index: 999;
+  }
+}
