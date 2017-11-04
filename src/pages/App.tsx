@@ -1,25 +1,42 @@
 import * as React from 'react'
-import { Button, NavBar, Icon } from 'antd-mobile'
+import { NavBar, Icon } from 'antd-mobile'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { observer } from 'mobx-react'
+import { store } from '../store/UIstore'
+import '../style/App.less'
 
+// Page
+import Login from './Login'
+import Profile from './Profile'
+@observer
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <NavBar
-          mode="dark"
-          leftContent="Back"
-          rightContent={[<Icon key="0" type="search" style={{ marginRight: '16px' }} />, <Icon key="1" type="ellipsis" />]}
-        >
-          NavBar
-        </NavBar>
-        <div className="App-header">
-          <Button type="primary">按钮</Button>
-          <h2>Welcome to React</h2>
+      <Router>
+        <div className="App">
+          <div className="header">
+            <NavBar mode="dark">{store.title}</NavBar>
+          </div>
+          <div className="contain">
+            <Route path="/me" component={Profile} />
+            <Route path="/login" component={Login} />
+          </div>
+          <div className="touch-bar">
+            <div className="touch-bar-item">
+              <Link to="/login">
+                <Icon type="contacts" />
+                <p>同学录</p>
+              </Link>
+            </div>
+            <div className="touch-bar-item">
+              <Link to="/me">
+                <Icon type="user" />
+                <p>我的信息</p>
+              </Link>
+            </div>
+          </div>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
+      </Router>
     )
   }
 }
