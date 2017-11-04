@@ -1,7 +1,9 @@
 import * as React from 'react'
 import { store } from '../store/UIstore'
-import { Button, List, InputItem, Flex, WhiteSpace, NoticeBar } from 'antd-mobile'
+import { Button, List, InputItem, Flex, WhiteSpace, NoticeBar, Toast } from 'antd-mobile'
 const Col = Flex.Item
+import * as PropTypes from 'prop-types'
+import http from '../http'
 class Login extends React.Component {
   username: string = ''
   password: string = ''
@@ -9,12 +11,26 @@ class Login extends React.Component {
     super(props)
     store.title = '登录'
   }
+  static contextTypes = {
+    router: PropTypes.object
+  }
   submit = () => {
     const data = {
-      username: this.username,
-      password: this.password
+      Uusername: this.username,
+      Upassword: this.password
     }
-    console.log(data)
+    Toast.loading('登录中...', 0)
+    http.post('/User/login', data).then(({ data }) => {
+      Toast.hide()
+      if (data.type == 1) {
+        window.localStorage.token = data.data.Utoken
+        http.defaults.headers.common['Utoken'] = data.data.Utoken
+        Toast.success('登录成功', 2)
+        this.context.router.history.push('/me')
+      } else {
+        Toast.fail(data.message, 2)
+      }
+    })
   }
   render() {
     return (

@@ -1,11 +1,12 @@
 import * as React from 'react'
 import { store } from '../store/UIstore'
-import { List, InputItem } from 'antd-mobile'
+import { List, InputItem, Toast } from 'antd-mobile'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as PropTypes from 'prop-types'
 const Item = List.Item
 import '../style/Profile.less'
+import http from '../http'
 interface infomation {
   name: string
   stdno: string
@@ -20,41 +21,71 @@ interface infomation {
 class Profile extends React.Component {
   @observable
   userinfo: infomation = {
-    name: '陈汉森',
-    stdno: '031502205',
-    wx: 'Chs199707',
-    qq: '623528324',
-    email: 'chsqaq@gmail.com',
-    address: '阿德撒旦',
-    phone: '12312312312',
-    tags: 'Hello world'
+    name: '',
+    stdno: '',
+    wx: '',
+    qq: '',
+    email: '',
+    address: '',
+    phone: '',
+    tags: ''
   }
   @observable
   nowData: infomation = {
-    name: '陈汉森',
-    stdno: '031502205',
-    wx: 'Chs199707',
-    qq: '623528324',
-    email: 'chsqaq@gmail.com',
-    address: '阿德撒旦',
-    phone: '12312312312',
-    tags: 'Hello world'
+    name: '',
+    stdno: '',
+    wx: '',
+    qq: '',
+    email: '',
+    address: '',
+    phone: '',
+    tags: ''
   }
   @observable edit: boolean = false
+  @observable stdid: string = ''
   constructor(props: any) {
     super(props)
     store.title = '个人中心'
+    const node = document.getElementById('contain')
+    if (node) {
+      node.scrollTop = 0
+    }
   }
   static contextTypes = {
     router: PropTypes.object
   }
   componentDidMount() {
-    console.log(this.context)
+    if (this.context.router.route.match.path == '/me') {
+      this.stdid = window.localStorage.stdid
+    } else {
+      this.stdid = this.context.router.route.match.params.id
+    }
+    this.getByStid(this.stdid)
+  }
+  getByStid = stdid => {
+    http.get(`/User_info/get?Uuserid=${stdid}`).then(({ data }) => {
+      console.log(data)
+    })
   }
   onEditClick = save => {
     if (save) {
-      this.userinfo = this.nowData
-      this.edit = false
+      const data = {
+        Uusername: this.nowData.name,
+        Uuserphone: this.nowData.phone,
+        Uuserwechat: this.nowData.wx,
+        Uuseremail: this.nowData.email,
+        Uuserqq: this.nowData.qq,
+        Uuserlang: this.nowData.tags
+      }
+      http.post('/User_info/update', data).then(({ data }) => {
+        if (data.type == 1) {
+          Toast.success('保存成功', 2)
+          this.userinfo = this.nowData
+          this.edit = false
+        } else {
+          Toast.fail('保存失败', 2)
+        }
+      })
     } else {
       this.nowData = this.userinfo
       this.edit = true

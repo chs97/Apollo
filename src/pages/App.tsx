@@ -18,9 +18,10 @@ class App extends React.Component {
           <div className="header">
             <NavBar mode="dark">{store.title}</NavBar>
           </div>
-          <div className="contain">
+          <div className="contain" id="contain">
             <Route path="/me" component={Profile} />
             <Route path="/list" component={ClassMateList} />
+            <Route path="/profile/:id" component={Profile} />
             <Route exact path="/" component={Login} />
           </div>
           <div className="touch-bar">
