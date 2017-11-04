@@ -25,6 +25,7 @@ class Login extends React.Component {
       if (data.type == 1) {
         window.localStorage.token = data.data.Utoken
         http.defaults.headers.common['Utoken'] = data.data.Utoken
+        window.localStorage.stdid = data.data.Uuserid
         Toast.success('登录成功', 2)
         this.context.router.history.push('/me')
       } else {

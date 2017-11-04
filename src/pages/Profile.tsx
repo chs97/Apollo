@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { store } from '../store/UIstore'
 import { List, InputItem, Toast } from 'antd-mobile'
-import { observable } from 'mobx'
+import { observable, computed } from 'mobx'
 import { observer } from 'mobx-react'
 import * as PropTypes from 'prop-types'
 const Item = List.Item
@@ -19,6 +19,7 @@ interface infomation {
 }
 @observer
 class Profile extends React.Component {
+  @observable editable: boolean = false
   @observable
   userinfo: infomation = {
     name: '',
@@ -43,6 +44,11 @@ class Profile extends React.Component {
   }
   @observable edit: boolean = false
   @observable stdid: string = ''
+  @computed
+  get avatarUrl() {
+    const year = this.stdid.slice(2, 4)
+    return `http://59.77.226.32/xszp/${year}/${this.stdid}.jpg`
+  }
   constructor(props: any) {
     super(props)
     store.title = '个人中心'
@@ -57,14 +63,29 @@ class Profile extends React.Component {
   componentDidMount() {
     if (this.context.router.route.match.path == '/me') {
       this.stdid = window.localStorage.stdid
+      this.editable = true
     } else {
       this.stdid = this.context.router.route.match.params.id
     }
     this.getByStid(this.stdid)
   }
   getByStid = stdid => {
+    Toast.loading('加载中...', 0)
     http.get(`/User_info/get?Uuserid=${stdid}`).then(({ data }) => {
-      console.log(data)
+      Toast.hide()
+      if (data.type == 1) {
+        const info = data.data[0]
+        this.userinfo.name = info.Uusername
+        this.userinfo.stdno = info.Uuserid
+        this.userinfo.address = info.Uadress
+        this.userinfo.phone = info.Uuserphone
+        this.userinfo.wx = info.Uuserwechat
+        this.userinfo.email = info.Uuseremail
+        this.userinfo.qq = info.Uuserqq
+        this.userinfo.tags = info.Uuserlang
+      } else {
+        Toast.fail('获取信息错误', 2)
+      }
     })
   }
   onEditClick = save => {
@@ -77,7 +98,7 @@ class Profile extends React.Component {
         Uuserqq: this.nowData.qq,
         Uuserlang: this.nowData.tags
       }
-      http.post('/User_info/update', data).then(({ data }) => {
+      http.post(`/User_info/update?Uuserid=${this.stdid}`, data).then(({ data }) => {
         if (data.type == 1) {
           Toast.success('保存成功', 2)
           this.userinfo = this.nowData
@@ -150,14 +171,16 @@ class Profile extends React.Component {
       <div className="profile">
         <div className="header">
           <div className="avatar">
-            <img src="" alt="" />
+            <img src={this.avatarUrl} alt="" />
           </div>
-          <p>用户名</p>
+          <p>{this.userinfo.name}</p>
         </div>
         {this.edit ? editInfo : info}
-        <div className="edit" onClick={() => this.onEditClick(this.edit)}>
-          {this.edit ? <i className="fa fa-floppy-o" aria-hidden="true" /> : <i className="fa fa-pencil-square-o" aria-hidden="true" />}
-        </div>
+        {this.editable && (
+          <div className="edit" onClick={() => this.onEditClick(this.edit)}>
+            {this.edit ? <i className="fa fa-floppy-o" aria-hidden="true" /> : <i className="fa fa-pencil-square-o" aria-hidden="true" />}
+          </div>
+        )}
       </div>
     )
   }
