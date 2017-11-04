@@ -96,7 +96,6 @@ class ClassMateList extends React.Component {
         if (data.data.length == 0) Toast.info('无该用户', 2)
         else {
           this.searchResult = data.data[0]
-          console.log(data.data[0])
           this.addModal = true
         }
       } else {
@@ -129,17 +128,7 @@ class ClassMateList extends React.Component {
     return (
       <div ref={node => (this.node = node)} className="list">
         <SearchBar placeholder="输入学号搜索同学" onSubmit={this.searchById} onChange={val => (this.searchVal = val)} ref={ref => (this.manualFocusInst = ref)} />
-        <Tabs
-          tabs={tabs}
-          initialPage={0}
-          onChange={(tab, index) => {
-            console.log('onChange', index, tab)
-          }}
-          onTabClick={(tab, index) => {
-            console.log('onTabClick', index, tab)
-          }}
-          swipeable={false}
-        >
+        <Tabs tabs={tabs} initialPage={0} swipeable={false}>
           <div id="list" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             {this.classMateList.map((item, index) => (
               <div style={{ width: '100%' }}>
