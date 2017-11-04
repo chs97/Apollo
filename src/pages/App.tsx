@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { NavBar, Icon } from 'antd-mobile'
+import { NavBar } from 'antd-mobile'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { store } from '../store/UIstore'
@@ -24,13 +24,13 @@ class App extends React.Component {
           <div className="touch-bar">
             <div className="touch-bar-item">
               <Link to="/login">
-                <Icon type="contacts" />
+                <i className="fa fa-address-book" aria-hidden="true" />
                 <p>同学录</p>
               </Link>
             </div>
             <div className="touch-bar-item">
               <Link to="/me">
-                <Icon type="user" />
+                <i className="fa fa-user" aria-hidden="true" />
                 <p>我的信息</p>
               </Link>
             </div>
