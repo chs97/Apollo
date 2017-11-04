@@ -3,6 +3,7 @@ import { store } from '../store/UIstore'
 import { List, InputItem } from 'antd-mobile'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
+import * as PropTypes from 'prop-types'
 const Item = List.Item
 import '../style/Profile.less'
 interface infomation {
@@ -44,6 +45,12 @@ class Profile extends React.Component {
     super(props)
     store.title = '个人中心'
   }
+  static contextTypes = {
+    router: PropTypes.object
+  }
+  componentDidMount() {
+    console.log(this.context)
+  }
   onEditClick = save => {
     if (save) {
       this.userinfo = this.nowData
@@ -60,10 +67,18 @@ class Profile extends React.Component {
           <Item extra={this.userinfo.name}>姓名</Item>
           <Item extra={this.userinfo.stdno}>学号</Item>
           <Item extra={this.userinfo.phone}>手机号</Item>
-          <Item extra={this.userinfo.wx}>微信</Item>
-          <Item extra={this.userinfo.qq}>QQ</Item>
-          <Item extra={this.userinfo.email}>邮箱</Item>
-          <Item extra={this.userinfo.address}>家庭地址</Item>
+          <Item extra={this.userinfo.wx} wrap={true}>
+            微信
+          </Item>
+          <Item extra={this.userinfo.qq} wrap={true}>
+            QQ
+          </Item>
+          <Item extra={this.userinfo.email} wrap={true}>
+            邮箱
+          </Item>
+          <Item extra={this.userinfo.address} wrap={true}>
+            家庭地址
+          </Item>
         </List>
         <List renderHeader={() => '个性签名'}>
           <Item>{this.userinfo.tags}</Item>

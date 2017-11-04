@@ -8,7 +8,7 @@ import '../style/App.less'
 // Page
 import Login from './Login'
 import Profile from './Profile'
-import List from './List'
+import ClassMateList from './ClassMateList'
 @observer
 class App extends React.Component {
   render() {
@@ -20,7 +20,7 @@ class App extends React.Component {
           </div>
           <div className="contain">
             <Route path="/me" component={Profile} />
-            <Route path="/list" component={List} />
+            <Route path="/list" component={ClassMateList} />
             <Route exact path="/" component={Login} />
           </div>
           <div className="touch-bar">
